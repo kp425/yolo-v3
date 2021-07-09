@@ -93,7 +93,7 @@ def calculate_iou(boxes_preds, boxes_labels, box_format="midpoint"):
     return intersection / (box1_area + box2_area - intersection + 1e-6)
 
 
- def corners_to_center(boxes):
+def corners_to_center(boxes):
     if len(boxes.shape)==1:
         boxes = boxes[np.newaxis,:]
     x = (boxes[...,0:1] + boxes[...,2:3])/2
