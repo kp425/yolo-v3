@@ -96,20 +96,20 @@ def calculate_iou(boxes_preds, boxes_labels, box_format="midpoint"):
 def corners_to_center(boxes):
     if len(boxes.shape)==1:
         boxes = boxes[np.newaxis,:]
-    x = (boxes[...,0:1] + boxes[...,2:3])/2
-    y = (boxes[...,1:2] + boxes[...,3:4])/2
-    w = boxes[...,2:3] - boxes[...,0:1]
-    h = boxes[...,3:4] - boxes[...,1:2]
+    x = (boxes[...,0] + boxes[...,2])/2
+    y = (boxes[...,1] + boxes[...,3])/2
+    w = boxes[...,2] - boxes[...,0]
+    h = boxes[...,3] - boxes[...,1]
     return np.concatenate([x,y,w,h], axis=-1)
 
 
 def center_to_corners(boxes):
     if len(boxes.shape)==1:
         boxes = boxes[np.newaxis,:] 
-    x1 = boxes[...,0:1] - boxes[...,2:3]/2
-    y1 = boxes[...,1:2] - boxes[...,3:4]/2
-    x2 = boxes[...,0:1] + boxes[...,2:3]/2
-    y2 = boxes[...,1:2] + boxes[...,3:4]/2
+    x1 = boxes[...,0] - boxes[...,2]/2
+    y1 = boxes[...,1] - boxes[...,3]/2
+    x2 = boxes[...,0] + boxes[...,2]/2
+    y2 = boxes[...,1] + boxes[...,3]/2
     return np.concatenate([x1,y1,x2,y2], axis=-1)
 
 
