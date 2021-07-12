@@ -93,24 +93,24 @@ def calculate_iou(boxes_preds, boxes_labels, box_format="midpoint"):
     return intersection / (box1_area + box2_area - intersection + 1e-6)
 
 
-def corners_to_center(boxes):
-    if len(boxes.shape)==1:
-        boxes = boxes[np.newaxis,:]
-    x = (boxes[...,0] + boxes[...,2])/2
-    y = (boxes[...,1] + boxes[...,3])/2
-    w = boxes[...,2] - boxes[...,0]
-    h = boxes[...,3] - boxes[...,1]
-    return np.concatenate([x,y,w,h], axis=-1)
+def xyxy2xywh(x):
+    # Convert nx4 boxes from [x1, y1, x2, y2] to [x, y, w, h] where xy1=top-left, xy2=bottom-right
+    y = np.copy(x)
+    y[:, 0] = (x[:, 0] + x[:, 2]) / 2  # x center
+    y[:, 1] = (x[:, 1] + x[:, 3]) / 2  # y center
+    y[:, 2] = x[:, 2] - x[:, 0]  # width
+    y[:, 3] = x[:, 3] - x[:, 1]  # height
+    return y
 
 
-def center_to_corners(boxes):
-    if len(boxes.shape)==1:
-        boxes = boxes[np.newaxis,:] 
-    x1 = boxes[...,0] - boxes[...,2]/2
-    y1 = boxes[...,1] - boxes[...,3]/2
-    x2 = boxes[...,0] + boxes[...,2]/2
-    y2 = boxes[...,1] + boxes[...,3]/2
-    return np.concatenate([x1,y1,x2,y2], axis=-1)
+def xywh2xyxy(x):
+    # Convert nx4 boxes from [x, y, w, h] to [x1, y1, x2, y2] where xy1=top-left, xy2=bottom-right
+    y = np.copy(x)
+    y[:, 0] = x[:, 0] - x[:, 2] / 2  # top left x
+    y[:, 1] = x[:, 1] - x[:, 3] / 2  # top left y
+    y[:, 2] = x[:, 0] + x[:, 2] / 2  # bottom right x
+    y[:, 3] = x[:, 1] + x[:, 3] / 2  # bottom right y
+    return y
 
 
 def image_hw_when_resized(original_h, original_w, new_h, new_w):
